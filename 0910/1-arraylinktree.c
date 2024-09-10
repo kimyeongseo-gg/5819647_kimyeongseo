@@ -52,15 +52,15 @@ void ArrayPostOrder(int* tree, int index, int size) {
 
 // 배열 순회 함수 호출
 void ArrayOrders(int* tree, int size) {
-    printf("Array PreOrder: ");
+    
     ArrayPreOrder(tree, 0, size);
     printf("\n");
 
-    printf("Array InOrder: ");
+   
     ArrayInOrder(tree, 0, size);
     printf("\n");
 
-    printf("Array PostOrder: ");
+   
     ArrayPostOrder(tree, 0, size);
     printf("\n");
 }
@@ -134,15 +134,15 @@ void LinkPostOrder(TreeNode* root) {
 
 // 링크드 트리 순회 함수 호출
 void LinkOrders(TreeNode* root) {
-    printf("Link PreOrder: ");
+ 
     LinkPreOrder(root);
     printf("\n");
 
-    printf("Link InOrder: ");
+   
     LinkInOrder(root);
     printf("\n");
 
-    printf("Link PostOrder: ");
+   
     LinkPostOrder(root);
     printf("\n");
 }
