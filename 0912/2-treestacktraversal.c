@@ -161,7 +161,7 @@ int main() {
     root->left = NULL;
     root->right = NULL;
 
-    // 트리 생성
+  
     GenerateLinkTree(root);
 
     // 전위, 중위, 후위 순회
