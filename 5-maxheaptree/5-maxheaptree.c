@@ -2,214 +2,215 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MAX_ELEMENT 200 // ìµœëŒ€ í™ì˜ í¬ê¸°
+#define MAX_ELEMENT 200 // ÃÖ´ë ÈüÀÇ Å©±â
 
-// í™ì˜ ê° ìš”ì†Œë¥¼ í‘œí˜„í•˜ëŠ” êµ¬ì¡°ì²´
+// ÈüÀÇ °¢ ¿ä¼Ò¸¦ Ç¥ÇöÇÏ´Â ±¸Á¶Ã¼
 typedef struct {
-    int key; // í™ì˜ í‚¤ ê°’
+    int key; // ÈüÀÇ Å° °ª
 } element;
 
-// í™ì„ í‘œí˜„í•˜ëŠ” êµ¬ì¡°ì²´
+// ÈüÀ» Ç¥ÇöÇÏ´Â ±¸Á¶Ã¼
 typedef struct {
-    element heap[MAX_ELEMENT]; // í™ ë°°ì—´
-    int heap_size; // í™ì˜ í˜„ì¬ í¬ê¸°
+    element heap[MAX_ELEMENT]; // Èü ¹è¿­
+    int heap_size; // ÈüÀÇ ÇöÀç Å©±â
 } HeapType;
 
-// í™ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
+
+// ÈüÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
 HeapType* create() {
-    HeapType* h = (HeapType*)malloc(sizeof(HeapType)); // í™ ë©”ëª¨ë¦¬ í• ë‹¹
+    HeapType* h = (HeapType*)malloc(sizeof(HeapType)); // Èü ¸Ş¸ğ¸® ÇÒ´ç
     if (h == NULL) {
-        fprintf(stderr, "ë©”ëª¨ë¦¬ í• ë‹¹ ì‹¤íŒ¨\n");
-        exit(1); // ë©”ëª¨ë¦¬ í• ë‹¹ ì‹¤íŒ¨ ì‹œ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
+        fprintf(stderr, "¸Ş¸ğ¸® ÇÒ´ç ½ÇÆĞ\n");
+        exit(1); // ¸Ş¸ğ¸® ÇÒ´ç ½ÇÆĞ ½Ã ÇÁ·Î±×·¥ Á¾·á
     }
-    h->heap_size = 0; // ì´ˆê¸° í™ í¬ê¸° 0ìœ¼ë¡œ ì„¤ì •
+    h->heap_size = 0; // ÃÊ±â Èü Å©±â 0À¸·Î ¼³Á¤
     return h;
 }
 
-// í™ì˜ í˜„ì¬ ìƒíƒœë¥¼ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
+// ÈüÀÇ ÇöÀç »óÅÂ¸¦ Ãâ·ÂÇÏ´Â ÇÔ¼ö
 void printHeap(HeapType* h) {
     for (int j = 1; j <= h->heap_size; j++) {
-        printf("%d ", h->heap[j].key); // í™ì˜ ê° ìš”ì†Œ ì¶œë ¥
+        printf("%d ", h->heap[j].key); // ÈüÀÇ °¢ ¿ä¼Ò Ãâ·Â
     }
     printf("\n");
 }
 
-// ìµœëŒ€ í™ì— ìƒˆë¡œìš´ ìš”ì†Œë¥¼ ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
+// ÃÖ´ë Èü¿¡ »õ·Î¿î ¿ä¼Ò¸¦ Ãß°¡ÇÏ´Â ÇÔ¼ö
 void insert_max_heap(HeapType* h, element item, bool show) {
     if (h->heap_size >= MAX_ELEMENT - 1) {
-        printf("í™ì´ ê°€ë“ ì°¼ìŠµë‹ˆë‹¤.\n");
-        return; // ë°°ì—´ ë²”ìœ„ ì´ˆê³¼ ë°©ì§€
+        printf("ÈüÀÌ °¡µæ Ã¡½À´Ï´Ù.\n");
+        return; // ¹è¿­ ¹üÀ§ ÃÊ°ú ¹æÁö
     }
 
-    int i = ++(h->heap_size); // í™ì˜ í¬ê¸°ë¥¼ ì¦ê°€ì‹œí‚¤ê³  ìƒˆ ìœ„ì¹˜ ì„¤ì •
-    h->heap[i] = item; // ìƒˆë¡œìš´ ë…¸ë“œë¥¼ ë§ˆì§€ë§‰ ìœ„ì¹˜ì— ì‚½ì…
+    int i = ++(h->heap_size); // ÈüÀÇ Å©±â¸¦ Áõ°¡½ÃÅ°°í »õ À§Ä¡ ¼³Á¤
+    h->heap[i] = item; // »õ·Î¿î ³ëµå¸¦ ¸¶Áö¸· À§Ä¡¿¡ »ğÀÔ
 
-    // ìƒˆë¡œìš´ ë…¸ë“œê°€ ì‚½ì…ëœ ì§í›„ì˜ ìƒíƒœ ì¶œë ¥
+    // »õ·Î¿î ³ëµå°¡ »ğÀÔµÈ Á÷ÈÄÀÇ »óÅÂ Ãâ·Â
     if (show) {
 
-        printHeap(h); // í˜„ì¬ ìƒíƒœ ì¶œë ¥
+        printHeap(h); // ÇöÀç »óÅÂ Ãâ·Â
     }
 
-    int move_count = 0; // ì´ë™ íšŸìˆ˜ ì´ˆê¸°í™”
+    int move_count = 0; // ÀÌµ¿ È½¼ö ÃÊ±âÈ­
 
-    // ë¶€ëª¨ ë…¸ë“œì™€ ë¹„êµí•˜ì—¬ ìœ„ì¹˜ë¥¼ ì¡°ì •í•˜ëŠ” ê³¼ì •
+    // ºÎ¸ğ ³ëµå¿Í ºñ±³ÇÏ¿© À§Ä¡¸¦ Á¶Á¤ÇÏ´Â °úÁ¤
     while (i != 1 && h->heap[i].key > h->heap[i / 2].key) {
-        // ë¶€ëª¨ ë…¸ë“œì™€ í˜„ì¬ ë…¸ë“œì˜ ê°’ì„ êµí™˜
+        // ºÎ¸ğ ³ëµå¿Í ÇöÀç ³ëµåÀÇ °ªÀ» ±³È¯
         element temp = h->heap[i];
         h->heap[i] = h->heap[i / 2];
         h->heap[i / 2] = temp;
 
-        i /= 2; // ë¶€ëª¨ ë…¸ë“œë¡œ ì´ë™
-        move_count++; // ì´ë™ íšŸìˆ˜ ì¦ê°€
+        i /= 2; // ºÎ¸ğ ³ëµå·Î ÀÌµ¿
+        move_count++; // ÀÌµ¿ È½¼ö Áõ°¡
 
         if (show) {
-            printHeap(h); // í˜„ì¬ ìƒíƒœ ì¶œë ¥ (ì¤‘ê°„ ê³¼ì • ì¶œë ¥)
+            printHeap(h); // ÇöÀç »óÅÂ Ãâ·Â (Áß°£ °úÁ¤ Ãâ·Â)
         }
     }
 
     if (show) {
-        printf("ë…¸ë“œê°€ ì´ë™ëœ íšŸìˆ˜: %d\n", move_count); // ì´ë™ íšŸìˆ˜ ì¶œë ¥
+        printf("³ëµå°¡ ÀÌµ¿µÈ È½¼ö: %d\n", move_count); // ÀÌµ¿ È½¼ö Ãâ·Â
     }
 }
 
 
-// ìµœëŒ€ í™ì—ì„œ ë£¨íŠ¸ ë…¸ë“œë¥¼ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜
+// ÃÖ´ë Èü¿¡¼­ ·çÆ® ³ëµå¸¦ »èÁ¦ÇÏ´Â ÇÔ¼ö
 element delete_max_heap(HeapType* h) {
     if (h->heap_size == 0) {
-        printf("í™ì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.\n");
-        element empty = { -1 }; // ë¹ˆ ê°’ ë°˜í™˜
+        printf("ÈüÀÌ ºñ¾î ÀÖ½À´Ï´Ù.\n");
+        element empty = { -1 }; // ºó °ª ¹İÈ¯
         return empty;
     }
 
-    int parent, child; // ë¶€ëª¨, ìì‹ ë…¸ë“œ ì¸ë±ìŠ¤
-    element item, temp; // ì‚­ì œí•  ì•„ì´í…œê³¼ ë§ˆì§€ë§‰ ë…¸ë“œ ì €ì¥
+    int parent, child; // ºÎ¸ğ, ÀÚ½Ä ³ëµå ÀÎµ¦½º
+    element item, temp; // »èÁ¦ÇÒ ¾ÆÀÌÅÛ°ú ¸¶Áö¸· ³ëµå ÀúÀå
 
-    item = h->heap[1]; // ë£¨íŠ¸ ë…¸ë“œ ì €ì¥
-    temp = h->heap[h->heap_size--]; // ë§ˆì§€ë§‰ ë…¸ë“œë¥¼ ë£¨íŠ¸ë¡œ ì´ë™
-    parent = 1; // ë£¨íŠ¸ ë…¸ë“œë¡œ ì´ˆê¸°í™”
-    child = 2; // ìì‹ ë…¸ë“œ ì´ˆê¸°í™”
-    int move_count = 0; // ì´ë™ íšŸìˆ˜ ì´ˆê¸°í™”
+    item = h->heap[1]; // ·çÆ® ³ëµå ÀúÀå
+    temp = h->heap[h->heap_size--]; // ¸¶Áö¸· ³ëµå¸¦ ·çÆ®·Î ÀÌµ¿
+    parent = 1; // ·çÆ® ³ëµå·Î ÃÊ±âÈ­
+    child = 2; // ÀÚ½Ä ³ëµå ÃÊ±âÈ­
+    int move_count = 0; // ÀÌµ¿ È½¼ö ÃÊ±âÈ­
 
     h->heap[1] = h->heap[h->heap_size + 1];
 
     printHeap(h);
-    // í™ì˜ ì„±ì§ˆì„ ë§Œì¡±í•˜ë„ë¡ ë…¸ë“œ ìœ„ì¹˜ ì¡°ì •
+    // ÈüÀÇ ¼ºÁúÀ» ¸¸Á·ÇÏµµ·Ï ³ëµå À§Ä¡ Á¶Á¤
     while (child <= h->heap_size) {
-        // í˜„ì¬ ë…¸ë“œì˜ ìì‹ ë…¸ë“œ ì¤‘ ë” í° ìì‹ ë…¸ë“œë¥¼ ì°¾ëŠ”ë‹¤.
+        // ÇöÀç ³ëµåÀÇ ÀÚ½Ä ³ëµå Áß ´õ Å« ÀÚ½Ä ³ëµå¸¦ Ã£´Â´Ù.
         if (child < h->heap_size && h->heap[child].key < h->heap[child + 1].key) {
-            child++; // ë” í° ìì‹ìœ¼ë¡œ ì´ë™
+            child++; // ´õ Å« ÀÚ½ÄÀ¸·Î ÀÌµ¿
         }
         if (temp.key >= h->heap[child].key)
-            break; // í˜„ì¬ ë…¸ë“œê°€ ë” í¬ë©´ ì¢…ë£Œ
-        // í•œ ë‹¨ê³„ ì•„ë˜ë¡œ ì´ë™
+            break; // ÇöÀç ³ëµå°¡ ´õ Å©¸é Á¾·á
+        // ÇÑ ´Ü°è ¾Æ·¡·Î ÀÌµ¿
         element swap = h->heap[parent];
         h->heap[parent] = h->heap[child];
         h->heap[child] = swap;
-        parent = child; // ë¶€ëª¨ ë…¸ë“œ ì¸ë±ìŠ¤ ê°±ì‹ 
-        child *= 2; // ìì‹ ë…¸ë“œ ì¸ë±ìŠ¤ ê°±ì‹ 
-        move_count++; // ì´ë™ íšŸìˆ˜ ì¦ê°€
-        printHeap(h); // í˜„ì¬ ìƒíƒœ ì¶œë ¥ (ì¤‘ê°„ ê³¼ì • ì¶œë ¥)
+        parent = child; // ºÎ¸ğ ³ëµå ÀÎµ¦½º °»½Å
+        child *= 2; // ÀÚ½Ä ³ëµå ÀÎµ¦½º °»½Å
+        move_count++; // ÀÌµ¿ È½¼ö Áõ°¡
+        printHeap(h); // ÇöÀç »óÅÂ Ãâ·Â (Áß°£ °úÁ¤ Ãâ·Â)
     }
-    h->heap[parent] = temp; // ë§ˆì§€ë§‰ ë…¸ë“œë¥¼ ìƒˆ ìœ„ì¹˜ì— ì‚½ì…
+    h->heap[parent] = temp; // ¸¶Áö¸· ³ëµå¸¦ »õ À§Ä¡¿¡ »ğÀÔ
     move_count++;
-    printf("ë…¸ë“œê°€ ì´ë™ëœ íšŸìˆ˜: %d\n", move_count); // ì´ë™ íšŸìˆ˜ ì¶œë ¥
-    return item; // ì‚­ì œí•œ ë£¨íŠ¸ ë…¸ë“œ ë°˜í™˜
+    printf("³ëµå°¡ ÀÌµ¿µÈ È½¼ö: %d\n", move_count); // ÀÌµ¿ È½¼ö Ãâ·Â
+    return item; // »èÁ¦ÇÑ ·çÆ® ³ëµå ¹İÈ¯
 }
 
 
 
 
-// í™ì„ ë ˆë²¨ë³„ë¡œ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
+// ÈüÀ» ·¹º§º°·Î Ãâ·ÂÇÏ´Â ÇÔ¼ö
 void printHeapByLevel(HeapType* h) {
     if (h->heap_size == 0) {
-        printf("í™ì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.\n");
+        printf("ÈüÀÌ ºñ¾î ÀÖ½À´Ï´Ù.\n");
         return;
     }
-    int level = 1; // í˜„ì¬ ë ˆë²¨
-    int nodesAtCurrentLevel = 1; // í˜„ì¬ ë ˆë²¨ì—ì„œ ì¶œë ¥í•  ë…¸ë“œ ìˆ˜
-    int currentNodeIndex = 1; // í˜„ì¬ ë…¸ë“œ ì¸ë±ìŠ¤
+    int level = 1; // ÇöÀç ·¹º§
+    int nodesAtCurrentLevel = 1; // ÇöÀç ·¹º§¿¡¼­ Ãâ·ÂÇÒ ³ëµå ¼ö
+    int currentNodeIndex = 1; // ÇöÀç ³ëµå ÀÎµ¦½º
 
-    // ê° ë ˆë²¨ì— ëŒ€í•´ ë°˜ë³µ
+    // °¢ ·¹º§¿¡ ´ëÇØ ¹İº¹
     while (currentNodeIndex <= h->heap_size) {
-        printf("ë ˆë²¨ %d: ", level); // í˜„ì¬ ë ˆë²¨ ì¶œë ¥
+        printf("·¹º§ %d: ", level); // ÇöÀç ·¹º§ Ãâ·Â
         for (int i = 0; i < nodesAtCurrentLevel && currentNodeIndex <= h->heap_size; i++) {
-            printf("[%d] ", h->heap[currentNodeIndex].key); // í˜„ì¬ ë…¸ë“œ ì¶œë ¥
-            currentNodeIndex++; // ë‹¤ìŒ ë…¸ë“œë¡œ ì´ë™
+            printf("[%d] ", h->heap[currentNodeIndex].key); // ÇöÀç ³ëµå Ãâ·Â
+            currentNodeIndex++; // ´ÙÀ½ ³ëµå·Î ÀÌµ¿
         }
-        printf("\n"); // ì¤„ë°”ê¿ˆ
-        level++; // ë ˆë²¨ ì¦ê°€
-        nodesAtCurrentLevel *= 2; // ë‹¤ìŒ ë ˆë²¨ì˜ ë…¸ë“œ ìˆ˜
+        printf("\n"); // ÁÙ¹Ù²Ş
+        level++; // ·¹º§ Áõ°¡
+        nodesAtCurrentLevel *= 2; // ´ÙÀ½ ·¹º§ÀÇ ³ëµå ¼ö
     }
 }
 
-// ì‚¬ìš©ì ì¸í„°í˜ì´ìŠ¤ë¥¼ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
+// »ç¿ëÀÚ ÀÎÅÍÆäÀÌ½º¸¦ ½ÇÇàÇÏ´Â ÇÔ¼ö
 void runUserInterface(HeapType* heap) {
-    char command; // ì‚¬ìš©ì ëª…ë ¹ ì €ì¥
-    element item; // ì…ë ¥í•  ìš”ì†Œ
+    char command; // »ç¿ëÀÚ ¸í·É ÀúÀå
+    element item; // ÀÔ·ÂÇÒ ¿ä¼Ò
 
     for (true;;) {
-        printf("\n"); // ì¤„ë°”ê¿ˆ
-        printf("\n"); // ì¤„ë°”ê¿ˆ
+        printf("\n"); // ÁÙ¹Ù²Ş
+        printf("\n"); // ÁÙ¹Ù²Ş
 
         printf("*-*=======================*-*\n");
-        printf("|    i : ë…¸ë“œ ì¶”ê°€          |\n");
-        printf("|    d : ë…¸ë“œ ì‚­ì œ          |\n");
-        printf("|    p : ë ˆë²¨ë³„ ì¶œë ¥        |\n");
-        printf("|    c : ì¢…ë£Œ               |\n");
+        printf("|    i : ³ëµå Ãß°¡          |\n");
+        printf("|    d : ³ëµå »èÁ¦          |\n");
+        printf("|    p : ·¹º§º° Ãâ·Â        |\n");
+        printf("|    c : Á¾·á               |\n");
         printf("*-*========================*-*\n");
 
-        printf("\n"); // ì¤„ë°”ê¿ˆ
+        printf("\n"); // ÁÙ¹Ù²Ş
 
-        printf("\në©”ë‰´ ì…ë ¥ (i: ì¶”ê°€, d: ì‚­ì œ, p: ì¶œë ¥, c: ì¢…ë£Œ): ");
-        scanf_s(" %c", &command); // ì‚¬ìš©ì ì…ë ¥ ë°›ê¸°
+        printf("\n¸Ş´º ÀÔ·Â (i: Ãß°¡, d: »èÁ¦, p: Ãâ·Â, c: Á¾·á): ");
+        scanf_s(" %c", &command); // »ç¿ëÀÚ ÀÔ·Â ¹Ş±â
 
         switch (command) {
         case 'i':
-            printf("ì¶”ê°€í•  ê°’ ì…ë ¥: ");
-            scanf_s("%d", &item.key); // ì¶”ê°€í•  ê°’ ì…ë ¥
-            insert_max_heap(heap, item, true); // í™ì— ì¶”ê°€
+            printf("Ãß°¡ÇÒ °ª ÀÔ·Â: ");
+            scanf_s("%d", &item.key); // Ãß°¡ÇÒ °ª ÀÔ·Â
+            insert_max_heap(heap, item, true); // Èü¿¡ Ãß°¡
             break;
 
         case 'd':
             if (heap->heap_size == 0) {
-                printf("ì‚­ì œí•  ë…¸ë“œê°€ ì—†ìŠµë‹ˆë‹¤.\n"); // í™ì´ ë¹„ì–´ìˆì„ ê²½ìš°
+                printf("»èÁ¦ÇÒ ³ëµå°¡ ¾ø½À´Ï´Ù.\n"); // ÈüÀÌ ºñ¾îÀÖÀ» °æ¿ì
             }
             else {
-                delete_max_heap(heap); // ë£¨íŠ¸ ë…¸ë“œ ì‚­ì œ
+                delete_max_heap(heap); // ·çÆ® ³ëµå »èÁ¦
             }
             break;
 
         case 'p':
-            printf("íŠ¸ë¦¬ ë ˆë²¨ë³„ ì¶œë ¥:\n");
-            printHeapByLevel(heap); // ë ˆë²¨ë³„ë¡œ í™ ì¶œë ¥
+            printf("Æ®¸® ·¹º§º° Ãâ·Â:\n");
+            printHeapByLevel(heap); // ·¹º§º°·Î Èü Ãâ·Â
             break;
 
         case 'c':
-            printf("í”„ë¡œê·¸ë¨ì´ ì¢…ë£Œ ë˜ì—ˆìŠµë‹ˆë‹¤.\n");
-            return; // í”„ë¡œê·¸ë¨ ì¢…ë£Œ
+            printf("ÇÁ·Î±×·¥ÀÌ Á¾·á µÇ¾ú½À´Ï´Ù.\n");
+            return; // ÇÁ·Î±×·¥ Á¾·á
 
         default:
-            printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
+            printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù.\n");
             break;
         }
     }
 }
 
-// ì£¼ì–´ì§„ ë°°ì—´ì„ ì‚¬ìš©í•˜ì—¬ ìµœëŒ€ í™ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
+// ÁÖ¾îÁø ¹è¿­À» »ç¿ëÇÏ¿© ÃÖ´ë ÈüÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
 HeapType* generateMaxHeapTree(int inputData[], int size) {
-    HeapType* heap = create(); // í™ ìƒì„±
+    HeapType* heap = create(); // Èü »ı¼º
     for (int i = 0; i < size; i++) {
         element item;
-        item.key = inputData[i]; // ì…ë ¥ ë°ì´í„°ë¡œ ìš”ì†Œ ì´ˆê¸°í™”
-        insert_max_heap(heap, item, false); // í™ì— ìš”ì†Œ ì¶”ê°€
+        item.key = inputData[i]; // ÀÔ·Â µ¥ÀÌÅÍ·Î ¿ä¼Ò ÃÊ±âÈ­
+        insert_max_heap(heap, item, false); // Èü¿¡ ¿ä¼Ò Ãß°¡
     }
     return heap;
 }
 
 
 int main() {
-    int inputData[] = { 90, 89, 70, 36, 75, 63, 65, 21, 18, 15 }; // ì´ˆê¸° ë°ì´í„°
-    int size = sizeof(inputData) / sizeof(inputData[0]); // ë°ì´í„° í¬ê¸° ê³„ì‚°
+    int inputData[] = { 90, 89, 70, 36, 75, 63, 65, 21, 18, 15 }; // ÃÊ±â µ¥ÀÌÅÍ
+    int size = sizeof(inputData) / sizeof(inputData[0]); // µ¥ÀÌÅÍ Å©±â °è»ê
 
 
     HeapType* heap = generateMaxHeapTree(inputData, size);
