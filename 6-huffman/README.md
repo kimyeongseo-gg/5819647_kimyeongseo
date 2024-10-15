@@ -1,2 +1,2 @@
 # 6-huffman {Result image}
-![.](./image.png)
+![.](./image2.png)
