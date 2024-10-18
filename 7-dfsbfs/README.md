@@ -1,4 +1,5 @@
 # 7-dfsbfs 
 
 
-i[.](./image.png)
+![.](./image.png)
+![.](./image2.png)
