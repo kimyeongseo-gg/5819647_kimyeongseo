@@ -7,15 +7,15 @@
 #define MAX_VERTICES 100
 #define INF 1000
 
-int parent[MAX_VERTICES]; // ºÎ¸ğ ³ëµå¸¦ ÀúÀåÇÏ´Â ¹è¿­
+int parent[MAX_VERTICES]; // ë¶€ëª¨ ë…¸ë“œë¥¼ ì €ì¥í•˜ëŠ” ë°°ì—´
 
-// ºÎ¸ğ ¹è¿­ ÃÊ±âÈ­ ÇÔ¼ö
+// ë¶€ëª¨ ë°°ì—´ ì´ˆê¸°í™” í•¨ìˆ˜
 void set_init(int n) {
     for (int i = 0; i < n; i++)
         parent[i] = -1;
 }
 
-// curr°¡ ¼ÓÇÏ´Â ÁıÇÕÀ» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+// currê°€ ì†í•˜ëŠ” ì§‘í•©ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 int set_find(int curr) {
     if (parent[curr] == -1)
         return curr;
@@ -24,7 +24,7 @@ int set_find(int curr) {
     return curr;
 }
 
-// µÎ °³ÀÇ ¿ø¼Ò°¡ ¼ÓÇÑ ÁıÇÕÀ» ÇÕÄ¡´Â ÇÔ¼ö
+// ë‘ ê°œì˜ ì›ì†Œê°€ ì†í•œ ì§‘í•©ì„ í•©ì¹˜ëŠ” í•¨ìˆ˜
 void set_union(int a, int b) {
     int root1 = set_find(a);
     int root2 = set_find(b);
@@ -32,89 +32,89 @@ void set_union(int a, int b) {
         parent[root1] = root2;
 }
 
-// °£¼±À» ³ªÅ¸³»´Â ±¸Á¶Ã¼
+// ê°„ì„ ì„ ë‚˜íƒ€ë‚´ëŠ” êµ¬ì¡°ì²´
 struct Edge {
-    int start, end, weight; // ½ÃÀÛ ³ëµå, ³¡ ³ëµå, °¡ÁßÄ¡
+    int start, end, weight; // ì‹œì‘ ë…¸ë“œ, ë ë…¸ë“œ, ê°€ì¤‘ì¹˜
 };
 
 typedef struct GraphType {
-    int n; // °£¼±ÀÇ °³¼ö
-    struct Edge edges[2 * MAX_VERTICES]; // °£¼± ¹è¿­
+    int n; // ê°„ì„ ì˜ ê°œìˆ˜
+    struct Edge edges[2 * MAX_VERTICES]; // ê°„ì„  ë°°ì—´
 } GraphType;
 
-// ±×·¡ÇÁ ÃÊ±âÈ­ ÇÔ¼ö
+// ê·¸ë˜í”„ ì´ˆê¸°í™” í•¨ìˆ˜
 void graph_init(GraphType* g) {
-    g->n = 0; // °£¼± ¼ö ÃÊ±âÈ­
+    g->n = 0; // ê°„ì„  ìˆ˜ ì´ˆê¸°í™”
     for (int i = 0; i < 2 * MAX_VERTICES; i++) {
         g->edges[i].start = 0;
         g->edges[i].end = 0;
         g->edges[i].weight = INF;
     }
     if (g == NULL) {
-        printf("¸Ş¸ğ¸® ÇÒ´ç ½ÇÆĞ\n");
-        return -1;
+        printf("ë©”ëª¨ë¦¬ í• ë‹¹ ì‹¤íŒ¨\n");
+        return;
     }
 }
 
-// °£¼± »ğÀÔ ÇÔ¼ö
+// ê°„ì„  ì‚½ì… í•¨ìˆ˜
 void insert_edge(GraphType* g, int start, int end, int w) {
     if (g->n >= 2 * MAX_VERTICES) {
-        printf("°£¼± ¼ö°¡ ÃÖ´ë¸¦ ÃÊ°úÇß½À´Ï´Ù.\n"); // °£¼± ¼ö ÃÊ°ú ½Ã ¿À·ù ¸Ş½ÃÁö
-        return; // ¿À·ù Ã³¸®
+        printf("ê°„ì„  ìˆ˜ê°€ ìµœëŒ€ë¥¼ ì´ˆê³¼í–ˆìŠµë‹ˆë‹¤.\n"); // ê°„ì„  ìˆ˜ ì´ˆê³¼ ì‹œ ì˜¤ë¥˜ ë©”ì‹œì§€
+        return; // ì˜¤ë¥˜ ì²˜ë¦¬
     }
-    // °£¼± Á¤º¸¸¦ ¹è¿­¿¡ »ğÀÔ
+    // ê°„ì„  ì •ë³´ë¥¼ ë°°ì—´ì— ì‚½ì…
     g->edges[g->n].start = start;
     g->edges[g->n].end = end;
     g->edges[g->n].weight = w;
-    g->n++; // °£¼± ¼ö Áõ°¡
+    g->n++; // ê°„ì„  ìˆ˜ ì¦ê°€
 }
 
-// qsort()¿¡ »ç¿ëµÇ´Â ºñ±³ ÇÔ¼ö
+// qsort()ì— ì‚¬ìš©ë˜ëŠ” ë¹„êµ í•¨ìˆ˜
 int compare(const void* a, const void* b) {
     struct Edge* x = (struct Edge*)a;
     struct Edge* y = (struct Edge*)b;
-    return (x->weight - y->weight); // °¡ÁßÄ¡¸¦ ±âÁØÀ¸·Î Á¤·Ä
+    return (x->weight - y->weight); // ê°€ì¤‘ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì •ë ¬
 }
 
-// Qsort ±â¹İ Å©·ç½ºÄ® ¾Ë°í¸®Áò
+// Qsort ê¸°ë°˜ í¬ë£¨ìŠ¤ì¹¼ ì•Œê³ ë¦¬ì¦˜
 void QuickKruskal(GraphType* g) {
     if (g->n == 0) {
-        printf("±×·¡ÇÁ¿¡ °£¼±ÀÌ ¾ø½À´Ï´Ù.\n"); // °£¼±ÀÌ ¾øÀ» °æ¿ì ¸Ş½ÃÁö Ãâ·Â
+        printf("ê·¸ë˜í”„ì— ê°„ì„ ì´ ì—†ìŠµë‹ˆë‹¤.\n"); // ê°„ì„ ì´ ì—†ì„ ê²½ìš° ë©”ì‹œì§€ ì¶œë ¥
         return;
     }
 
-    int edge_accepted = 0; // ÇöÀç±îÁö ¼±ÅÃµÈ °£¼±ÀÇ ¼ö    
+    int edge_accepted = 0; // í˜„ì¬ê¹Œì§€ ì„ íƒëœ ê°„ì„ ì˜ ìˆ˜    
     int uset, vset;
     struct Edge e;
 
-    set_init(MAX_VERTICES); // ÁıÇÕ ÃÊ±âÈ­
-    qsort(g->edges, g->n, sizeof(struct Edge), compare); // °£¼±À» °¡ÁßÄ¡ ±âÁØÀ¸·Î Á¤·Ä
+    set_init(MAX_VERTICES); // ì§‘í•© ì´ˆê¸°í™”
+    qsort(g->edges, g->n, sizeof(struct Edge), compare); // ê°„ì„ ì„ ê°€ì¤‘ì¹˜ ê¸°ì¤€ìœ¼ë¡œ ì •ë ¬
 
     printf("Quick Based Kruskal\n");
     int i = 0;
 
-    // ¼±ÅÃµÈ °£¼± ¼ö°¡ (n-1)º¸´Ù ÀÛ°í, °£¼± ÀÎµ¦½º°¡ nº¸´Ù ÀÛÀ» µ¿¾È ¹İº¹
+    // ì„ íƒëœ ê°„ì„  ìˆ˜ê°€ (n-1)ë³´ë‹¤ ì‘ê³ , ê°„ì„  ì¸ë±ìŠ¤ê°€ në³´ë‹¤ ì‘ì„ ë™ì•ˆ ë°˜ë³µ
     while (edge_accepted < (g->n - 1) && i < g->n) {
         e = g->edges[i];
         uset = set_find(e.start);
         vset = set_find(e.end);
-        if (uset != vset) { // ¼­·Î ´Ù¸¥ ÁıÇÕÀÏ °æ¿ì
+        if (uset != vset) { // ì„œë¡œ ë‹¤ë¥¸ ì§‘í•©ì¼ ê²½ìš°
             printf("Edge (%d,%d) select %d\n", e.start, e.end, e.weight);
             edge_accepted++;
             set_union(uset, vset);
         }
-        i++; // ´ÙÀ½ °£¼±À¸·Î ÀÌµ¿
+        i++; // ë‹¤ìŒ ê°„ì„ ìœ¼ë¡œ ì´ë™
     }
 }
 
-// MinHeap ±¸Á¶Ã¼ Á¤ÀÇ
+// MinHeap êµ¬ì¡°ì²´ ì •ì˜
 typedef struct MinHeap {
-    struct Edge* edges; // °£¼± ¹è¿­
-    int size; // ÇöÀç ÈüÀÇ Å©±â
-    int capacity; // ÈüÀÇ ÃÖ´ë ¿ë·®
+    struct Edge* edges; // ê°„ì„  ë°°ì—´
+    int size; // í˜„ì¬ í™ì˜ í¬ê¸°
+    int capacity; // í™ì˜ ìµœëŒ€ ìš©ëŸ‰
 } MinHeap;
 
-// MinHeap »ı¼º ÇÔ¼ö
+// MinHeap ìƒì„± í•¨ìˆ˜
 MinHeap* create_min_heap(int capacity) {
     MinHeap* minHeap = (MinHeap*)malloc(sizeof(MinHeap));
     minHeap->edges = (struct Edge*)malloc(capacity * sizeof(struct Edge));
@@ -123,66 +123,66 @@ MinHeap* create_min_heap(int capacity) {
     return minHeap;
 }
 
-// µÎ Edge¸¦ ±³È¯ÇÏ´Â ÇÔ¼ö
+// ë‘ Edgeë¥¼ êµí™˜í•˜ëŠ” í•¨ìˆ˜
 void swap(struct Edge* a, struct Edge* b) {
     struct Edge temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// MinHeap ±¸Á¶ Á¶Á¤ ÇÔ¼ö
+// MinHeap êµ¬ì¡° ì¡°ì • í•¨ìˆ˜
 void min_heapify(MinHeap* minHeap, int idx) {
-    int smallest = idx; // °¡Àå ÀÛÀº ¿ä¼ÒÀÇ ÀÎµ¦½º
-    int left = 2 * idx + 1; // ¿ŞÂÊ ÀÚ½Ä ÀÎµ¦½º
-    int right = 2 * idx + 2; // ¿À¸¥ÂÊ ÀÚ½Ä ÀÎµ¦½º
+    int smallest = idx; // ê°€ì¥ ì‘ì€ ìš”ì†Œì˜ ì¸ë±ìŠ¤
+    int left = 2 * idx + 1; // ì™¼ìª½ ìì‹ ì¸ë±ìŠ¤
+    int right = 2 * idx + 2; // ì˜¤ë¥¸ìª½ ìì‹ ì¸ë±ìŠ¤
 
-    // °¡Àå ÀÛÀº °ªÀÇ ÀÎµ¦½º¸¦ Ã£À½
+    // ê°€ì¥ ì‘ì€ ê°’ì˜ ì¸ë±ìŠ¤ë¥¼ ì°¾ìŒ
     if (left < minHeap->size && minHeap->edges[left].weight < minHeap->edges[smallest].weight)
         smallest = left;
 
     if (right < minHeap->size && minHeap->edges[right].weight < minHeap->edges[smallest].weight)
         smallest = right;
 
-    // ±³È¯ÀÌ ÇÊ¿äÇÒ °æ¿ì
+    // êµí™˜ì´ í•„ìš”í•  ê²½ìš°
     if (smallest != idx) {
-        swap(&minHeap->edges[idx], &minHeap->edges[smallest]); // ±³È¯
+        swap(&minHeap->edges[idx], &minHeap->edges[smallest]); // êµí™˜
         min_heapify(minHeap, smallest);
     }
 }
 
-// ÃÖ¼Ò°ªÀ» ÃßÃâÇÏ´Â ÇÔ¼ö
+// ìµœì†Œê°’ì„ ì¶”ì¶œí•˜ëŠ” í•¨ìˆ˜
 struct Edge extract_min(MinHeap* minHeap) {
     if (minHeap->size == 0) {
-        struct Edge infEdge = { 0, 0, INF }; // °¡»óÀÇ °£¼± ¹İÈ¯
+        struct Edge infEdge = { 0, 0, INF }; // ê°€ìƒì˜ ê°„ì„  ë°˜í™˜
         return infEdge;
     }
 
-    struct Edge root = minHeap->edges[0]; // ·çÆ® ¿ä¼Ò ÀúÀå
-    minHeap->edges[0] = minHeap->edges[minHeap->size - 1]; // ¸¶Áö¸· ¿ä¼Ò·Î ´ëÃ¼
-    minHeap->size--; // Å©±â °¨¼Ò
-    min_heapify(minHeap, 0); // Èü ±¸Á¶ Á¶Á¤
-    return root; // ÃÖ¼Ò°ª ¹İÈ¯
+    struct Edge root = minHeap->edges[0]; // ë£¨íŠ¸ ìš”ì†Œ ì €ì¥
+    minHeap->edges[0] = minHeap->edges[minHeap->size - 1]; // ë§ˆì§€ë§‰ ìš”ì†Œë¡œ ëŒ€ì²´
+    minHeap->size--; // í¬ê¸° ê°ì†Œ
+    min_heapify(minHeap, 0); // í™ êµ¬ì¡° ì¡°ì •
+    return root; // ìµœì†Œê°’ ë°˜í™˜
 }
 
-// MinHeap¿¡ ¿ä¼Ò¸¦ »ğÀÔÇÏ´Â ÇÔ¼ö
+// MinHeapì— ìš”ì†Œë¥¼ ì‚½ì…í•˜ëŠ” í•¨ìˆ˜
 void insert_min_heap(MinHeap* minHeap, struct Edge edge) {
     if (minHeap->size == minHeap->capacity) {
         printf("Heap overflow\n");
         return;
     }
 
-    minHeap->edges[minHeap->size] = edge; // »õ·Î¿î °£¼± Ãß°¡
+    minHeap->edges[minHeap->size] = edge; // ìƒˆë¡œìš´ ê°„ì„  ì¶”ê°€
     int i = minHeap->size;
     minHeap->size++;
 
-    // ºÎ¸ğ¿Í ºñ±³ÇÏ¸ç À§·Î ¿Ã¶ó°¡¸ç À§Ä¡ Á¶Á¤
+    // ë¶€ëª¨ì™€ ë¹„êµí•˜ë©° ìœ„ë¡œ ì˜¬ë¼ê°€ë©° ìœ„ì¹˜ ì¡°ì •
     while (i != 0 && minHeap->edges[(i - 1) / 2].weight > minHeap->edges[i].weight) {
         swap(&minHeap->edges[i], &minHeap->edges[(i - 1) / 2]);
         i = (i - 1) / 2;
     }
 }
 
-// MinHeap ±â¹İ Kruskal ¾Ë°í¸®Áò
+// MinHeap ê¸°ë°˜ Kruskal ì•Œê³ ë¦¬ì¦˜
 void MinHeapKruskal(GraphType* g) {
     int edge_accepted = 0;
     int uset, vset;
@@ -212,9 +212,9 @@ void MinHeapKruskal(GraphType* g) {
     free(minHeap);
 }
 
-// ±×·¡ÇÁ¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+// ê·¸ë˜í”„ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
 void GenerateGraph(GraphType* g) {
-    // ¿¹½Ã °£¼± Ãß°¡ (start, end, weight)
+    // ì˜ˆì‹œ ê°„ì„  ì¶”ê°€ (start, end, weight)
     insert_edge(g, 1, 2, 3);
     insert_edge(g, 1, 7, 12);
     insert_edge(g, 1, 6, 11);
@@ -238,17 +238,17 @@ void GenerateGraph(GraphType* g) {
 
 
 
-// ¸ŞÀÎ ÇÔ¼ö
+// ë©”ì¸ í•¨ìˆ˜
 int main(void) {
 
     GraphType* g;
     g = (GraphType*)malloc(sizeof(GraphType));
     graph_init(g);
-    //±×·¡ÇÁ¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
+    //ê·¸ë˜í”„ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
     GenerateGraph(g);
 
-    QuickKruskal(g); // quick ±â¹İ
-    MinHeapKruskal(g); // minheap ±â¹İ
+    QuickKruskal(g); // quick ê¸°ë°˜
+    MinHeapKruskal(g); // minheap ê¸°ë°˜
 
     free(g);
     return 0;
