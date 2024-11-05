@@ -5,24 +5,114 @@
 #define TRUE 1
 #define FALSE 0
 #define MAX_VERTICES 100
-#define INF 1000000 /* ¹«ÇÑ´ë (¿¬°áÀÌ ¾ø´Â °æ¿ì) */
+#define INF 1000000 /* ë¬´í•œëŒ€ (ì—°ê²°ì´ ì—†ëŠ” ê²½ìš°) */
 
+// ë…¸ë“œ êµ¬ì¡°ì²´ ì •ì˜
 typedef struct Node {
-    int vertex;       // Á¤Á¡ ¹øÈ£
-    int weight;      // °¡ÁßÄ¡
-    struct Node* next; // ´ÙÀ½ ³ëµå
+    int vertex;       
+    int weight;      
+    struct Node* next; 
 } Node;
 
+// ê·¸ë˜í”„ êµ¬ì¡°ì²´ ì •ì˜
 typedef struct GraphType {
-    int n;           // Á¤Á¡ÀÇ °³¼ö
-    Node* adjList[MAX_VERTICES]; // ÀÎÁ¢ ¸®½ºÆ®
+    int n;                       
+    Node* adjList[MAX_VERTICES]; 
 } GraphType;
 
-int distance[MAX_VERTICES]; /* ½ÃÀÛÁ¤Á¡À¸·ÎºÎÅÍÀÇ ÃÖ´Ü°æ·Î °Å¸® */
-int found[MAX_VERTICES];     /* ¹æ¹®ÇÑ Á¤Á¡ Ç¥½Ã */
-int foundOrder[MAX_VERTICES]; // ¹æ¹®ÇÑ Á¤Á¡ ¼ø¼­ ÀúÀå
-int orderIndex = 0; // ¹æ¹® ¼ø¼­ ÀÎµ¦½º
+// ìµœì†Œí™ ë…¸ë“œ êµ¬ì¡°ì²´ ì •ì˜
+typedef struct MinHeapNode {
+    int vertex;   
+    int distance;  
+} MinHeapNode;
 
+// ìµœì†Œí™ êµ¬ì¡°ì²´ ì •ì˜
+typedef struct MinHeap {
+    MinHeapNode* array; 
+    int size;           
+    int capacity;       
+} MinHeap;
+
+// ìµœì†Œí™ ìƒì„± í•¨ìˆ˜
+MinHeap* createMinHeap(int capacity) {
+    MinHeap* minHeap = (MinHeap*)malloc(sizeof(MinHeap));
+    minHeap->capacity = capacity;
+    minHeap->size = 0;
+    minHeap->array = (MinHeapNode*)malloc(capacity * sizeof(MinHeapNode));
+    return minHeap;
+}
+
+// ë‘ ë…¸ë“œë¥¼ êµí™˜í•˜ëŠ” í•¨ìˆ˜
+void swap(MinHeapNode* a, MinHeapNode* b) {
+    MinHeapNode temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// ìµœì†Œí™ì„ ì •ë ¬í•˜ëŠ” í•¨ìˆ˜
+void minHeapify(MinHeap* minHeap, int idx) {
+    int smallest = idx;
+    int left = 2 * idx + 1;  
+    int right = 2 * idx + 2; 
+
+    // ì™¼ìª½ ìì‹ê³¼ ë¹„êµ
+    if (left < minHeap->size && minHeap->array[left].distance < minHeap->array[smallest].distance)
+        smallest = left;
+
+    // ì˜¤ë¥¸ìª½ ìì‹ê³¼ ë¹„êµ
+    if (right < minHeap->size && minHeap->array[right].distance < minHeap->array[smallest].distance)
+        smallest = right;
+
+    // ì œì¼ ì‘ì€ ë…¸ë“œê°€ í˜„ì¬ ë…¸ë“œê°€ ì•„ë‹ˆë©´ êµí™˜
+    if (smallest != idx) {
+        swap(&minHeap->array[smallest], &minHeap->array[idx]);
+        minHeapify(minHeap, smallest); 
+    }
+}
+
+// ìµœì†Œí™ì´ ë¹„ì—ˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+int isEmpty(MinHeap* minHeap) {
+    return minHeap->size == 0;
+}
+
+// ìµœì†Œí™ì—ì„œ ìµœì†Ÿê°’ì„ ì¶”ì¶œí•˜ëŠ” í•¨ìˆ˜
+MinHeapNode extractMin(MinHeap* minHeap) {
+    if (isEmpty(minHeap))
+        return (MinHeapNode) { -1, -1 }; 
+
+    MinHeapNode root = minHeap->array[0]; 
+    minHeap->array[0] = minHeap->array[minHeap->size - 1]; 
+    minHeap->size--;
+    minHeapify(minHeap, 0); 
+    return root;
+}
+
+// ìµœì†Œí™ì—ì„œ í‚¤ë¥¼ ê°ì†Œì‹œí‚¤ëŠ” í•¨ìˆ˜
+void decreaseKey(MinHeap* minHeap, int vertex, int distance) {
+    int i;
+    for (i = 0; i < minHeap->size; i++) {
+        if (minHeap->array[i].vertex == vertex) {
+            break; // ì •ì ì„ ì°¾ìœ¼ë©´ ì¢…ë£Œ
+        }
+    }
+    minHeap->array[i].distance = distance; 
+    // ë¶€ëª¨ ë…¸ë“œì™€ ë¹„êµí•˜ì—¬ ìœ„ì¹˜ ì¡°ì •
+    while (i != 0 && minHeap->array[i].distance < minHeap->array[(i - 1) / 2].distance) {
+        swap(&minHeap->array[i], &minHeap->array[(i - 1) / 2]);
+        i = (i - 1) / 2; 
+    }
+}
+
+// ìµœì†Œí™ì— ìƒˆë¡œìš´ ë…¸ë“œë¥¼ ì‚½ì…í•˜ëŠ” í•¨ìˆ˜
+void insertMinHeap(MinHeap* minHeap, int vertex, int distance) {
+    minHeap->size++; // í¬ê¸° ì¦ê°€
+    minHeap->array[minHeap->size - 1].vertex = vertex;
+    minHeap->array[minHeap->size - 1].distance = distance;
+
+    decreaseKey(minHeap, vertex, distance);
+}
+
+// ì¸ì ‘ ë¦¬ìŠ¤íŠ¸ì˜ ë…¸ë“œë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
 Node* createNode(int vertex, int weight) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->vertex = vertex;
@@ -31,77 +121,93 @@ Node* createNode(int vertex, int weight) {
     return newNode;
 }
 
+// ê·¸ë˜í”„ì— ì—£ì§€ë¥¼ ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
 void insert_edge(GraphType* g, int u, int v, int w) {
-    Node* newNode = createNode(v, w);
-    newNode->next = g->adjList[u];
+    Node* newNode = createNode(v, w); 
+    newNode->next = g->adjList[u]; 
     g->adjList[u] = newNode;
 
-    newNode = createNode(u, w); // ¹«Çâ ±×·¡ÇÁÀÌ¹Ç·Î ¾çÂÊ¿¡ Ãß°¡
-    newNode->next = g->adjList[v];
+    newNode = createNode(u, w); 
+    newNode->next = g->adjList[v]; 
     g->adjList[v] = newNode;
 }
 
+// ìµœë‹¨ ê±°ë¦¬ ì •ì ì„ ì„ íƒí•˜ëŠ” í•¨ìˆ˜
 int choose(int distance[], int n, int found[]) {
-    int i, min = INT_MAX, minpos = -1;
-    for (i = 1; i <= n; i++) { // 1ºÎÅÍ n±îÁö
-        if (distance[i] < min && !found[i]) {
+    int min = INF; // ìµœì†Œ ê±°ë¦¬
+    int minIndex = -1;
+
+    for (int i = 1; i <= n; i++) {
+        if (!found[i] && distance[i] < min) {
             min = distance[i];
-            minpos = i;
+            minIndex = i; 
         }
     }
-    return minpos;
+
+    return minIndex; 
 }
 
-void print_status(GraphType* g) {
+void print_status(GraphType* g, int distance[], int found[]) {
+    // ê±°ë¦¬ ì¶œë ¥
     printf("Distance: ");
-    for (int i = 1; i <= g->n; i++) { // 1ºÎÅÍ n±îÁö
+    for (int i = 1; i <= g->n; i++) { 
         if (distance[i] == INF)
             printf("* ");
         else
             printf("%d ", distance[i]);
     }
-    printf("\nFound: ");
-    for (int i = 1; i <= g->n; i++) { // 1ºÎÅÍ n±îÁö
+    printf("\n");
+
+    // ë°©ë¬¸ ìƒíƒœ ì¶œë ¥
+    printf("Found: ");
+    for (int i = 1; i <= g->n; i++) { 
         printf("%d ", found[i]);
     }
     printf("\n\n");
 }
 
+
 void shortest_path(GraphType* g, int start) {
-    int i, u, w;
-    for (i = 1; i <= g->n; i++) { /* ÃÊ±âÈ­ */
+    int distance[MAX_VERTICES];
+    int found[MAX_VERTICES] = { FALSE };
+    int foundOrder[MAX_VERTICES]; // ë°©ë¬¸ ìˆœì„œë¥¼ ì €ì¥í•  ë°°ì—´
+    int orderIndex = 0;
+
+    // ê±°ë¦¬ì™€ ë°©ë¬¸ ìƒíƒœ ì´ˆê¸°í™”
+    for (int i = 1; i <= g->n; i++) {
         distance[i] = INF;
         found[i] = FALSE;
     }
     distance[start] = 0;
 
-    foundOrder[orderIndex++] = start; // ¹æ¹® ¼ø¼­ ±â·Ï
+    foundOrder[orderIndex++] = start; // ì‹œì‘ ì •ì  ë°©ë¬¸ ìˆœì„œ ê¸°ë¡
 
-    for (i = 1; i <= g->n; i++) {
-        u = choose(distance, g->n, found);
-        if (u == -1) break; // ´õ ÀÌ»ó ¹æ¹®ÇÒ Á¤Á¡ÀÌ ¾øÀ¸¸é Á¾·á
-        found[u] = TRUE; // ¼±ÅÃÇÑ Á¤Á¡ ¹æ¹® Ç¥½Ã
+    for (int i = 1; i <= g->n; i++) {
+        int u = choose(distance, g->n, found); 
+        if (u == -1) break; 
+        found[u] = TRUE;
 
-        // ¹æ¹® ¼ø¼­ ±â·Ï
-        foundOrder[orderIndex++] = u; // ¹æ¹® ¼ø¼­ ±â·Ï
+        // ë°©ë¬¸ ìˆœì„œ ê¸°ë¡
+        foundOrder[orderIndex++] = u; // ë°©ë¬¸ ìˆœì„œ ê¸°ë¡
 
-        print_status(g); // ÇöÀç »óÅÂ Ãâ·Â
+        // í˜„ì¬ ìƒíƒœ ì¶œë ¥
+        print_status(g, distance, found);
 
-        Node* p = g->adjList[u]; // ÇöÀç Á¤Á¡ uÀÇ ÀÎÁ¢ ¸®½ºÆ®¸¦ ¼øÈ¸
+        Node* p = g->adjList[u]; // í˜„ì¬ ì •ì  uì˜ ì¸ì ‘ ë¦¬ìŠ¤íŠ¸ë¥¼ ìˆœíšŒ
         while (p != NULL) {
-            w = p->vertex; // ¿¬°áµÈ Á¤Á¡
-            // °Å¸® ¾÷µ¥ÀÌÆ® Á¶°Ç
+            int w = p->vertex; // ì—°ê²°ëœ ì •ì 
+            // ê±°ë¦¬ ì—…ë°ì´íŠ¸ ì¡°ê±´
             if (!found[w] && distance[u] + p->weight < distance[w]) {
                 distance[w] = distance[u] + p->weight;
             }
-            p = p->next; // ´ÙÀ½ ³ëµå
+            p = p->next; // ë‹¤ìŒ ë…¸ë“œ
         }
     }
 
-    
-    // ¹æ¹®ÇÑ Á¤Á¡ ¼ø¼­ Ãâ·Â
+
+    // íƒìƒ‰ ìˆœì„œ ì¶œë ¥
     printf("Found Order: ");
-    for (i = 1; i < orderIndex; i++) {
+    for (int i = 1; i < orderIndex; i++) {
         printf("%d ", foundOrder[i]);
     }
     printf("\n");
@@ -109,14 +215,14 @@ void shortest_path(GraphType* g, int start) {
 
 int main(void) {
     GraphType g;
-    g.n = 10; // Á¤Á¡ °³¼ö (1ºÎÅÍ 10±îÁö)
+    g.n = 10; // ì •ì  ê°œìˆ˜ (1ë¶€í„° 10ê¹Œì§€)
 
-    // ÀÎÁ¢ ¸®½ºÆ® ÃÊ±âÈ­
+    // ì¸ì ‘ ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
     for (int i = 1; i <= g.n; i++) {
         g.adjList[i] = NULL;
     }
 
-    // ¿§Áö Ãß°¡ (1ºÎÅÍ ½ÃÀÛ)
+    // ì—£ì§€ ì¶”ê°€ (1ë¶€í„° ì‹œì‘)
     insert_edge(&g, 1, 2, 3);
     insert_edge(&g, 1, 6, 11);
     insert_edge(&g, 1, 7, 12);
@@ -138,7 +244,7 @@ int main(void) {
     insert_edge(&g, 8, 10, 15);
     insert_edge(&g, 10, 9, 10);
 
-    shortest_path(&g, 1); // ½ÃÀÛ Á¤Á¡ 1¿¡¼­ ÃÖ´Ü °æ·Î Ã£±â
+    shortest_path(&g, 1); // ì‹œì‘ ì •ì  1ì—ì„œ ìµœë‹¨ ê²½ë¡œ ì°¾ê¸°
 
     return 0;
 }
