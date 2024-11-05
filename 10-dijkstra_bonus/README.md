@@ -1,4 +1,4 @@
 ![](./image.png)
 
-#Minheap 구현
+#Minheap {Result Image}
 ![](./minheap.png)
