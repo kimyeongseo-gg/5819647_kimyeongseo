@@ -50,15 +50,8 @@ void doInsertionSort(int randomData[]) {
         int insertionData[SIZE];
 
         // 랜덤 데이터를 생성하여 삽입 정렬에 사용
-        generateRandomData(insertionData, SIZE);  // 새로운 랜덤 데이터 생성
+        generateRandomData(insertionData);  // 새로운 랜덤 데이터 생성
 
-
-        // 랜덤 데이터 출력
-        printf("삽입 정렬에 사용될 랜덤 데이터 (Trial %d): ", trial + 1);
-        for (int k = 0; k < SIZE; k++) {
-            printf("%d ", insertionData[k]);
-        }
-        printf("\n");
 
         int comparisons = 0;  // 현재 시도의 비교 횟수 초기화
 
@@ -105,14 +98,7 @@ void doBubbleSort(int randomData[]) {
         int bubbleData[SIZE];
 
         // 랜덤 데이터를 생성하여 버블 정렬에 사용
-        generateRandomData(bubbleData, SIZE);  // 새로운 랜덤 데이터 생성
-
-        // 랜덤 데이터 출력
-        printf("버블 정렬에 사용될 랜덤 데이터 (Trial %d): ", trial + 1);
-        for (int k = 0; k < SIZE; k++) {
-            printf("%d ", bubbleData[k]);
-        }
-        printf("\n");
+        generateRandomData(bubbleData);  // 새로운 랜덤 데이터 생성
         
 
         int moves;  // 현재 시도의 이동 횟수 초기화
