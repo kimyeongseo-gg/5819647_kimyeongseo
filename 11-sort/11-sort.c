@@ -43,7 +43,7 @@ void doSelectionSort(int list[]) {
 void doInsertionSort(int randomData[]) {
     int n = SIZE;
     int totalComparisons = 0;  // 총 비교 횟수 변수
-    srand(time(NULL));
+
 
     // 20회 삽입 정렬 시도
     for (int trial = 0; trial < 20; trial++) {
@@ -91,7 +91,7 @@ void doInsertionSort(int randomData[]) {
 void doBubbleSort(int randomData[]) {
     int n = SIZE;
     int totalMoves = 0;  // 전체 이동 횟수 초기화
-    srand(time(NULL));
+
 
     // 20회 버블 정렬 시도
     for (int trial = 0; trial < 20; trial++) {
@@ -135,6 +135,7 @@ void doBubbleSort(int randomData[]) {
 }
 
 int main() {
+    srand(time(NULL));
 
     int randomData[SIZE];
     generateRandomData(randomData);
