@@ -3,11 +3,11 @@
 #include <time.h>
 
 #define SIZE 100
-#define MAX_SIZE 1000 // 0-999 »çÀÌÀÇ ·£´ı µ¥ÀÌÅÍ ¹üÀ§
+#define MAX_SIZE 1000 // 0-999 ì‚¬ì´ì˜ ëœë¤ ë°ì´í„° ë²”ìœ„
 
-int sorted[MAX_SIZE]; // Ãß°¡ °ø°£À» À§ÇÑ ¹è¿­
-int comparisonCount = 0; // ºñ±³ È½¼ö
-int moveCount = 0; // ÀÌµ¿ È½¼ö
+int sorted[MAX_SIZE]; // ì¶”ê°€ ê³µê°„ì„ ìœ„í•œ ë°°ì—´
+int comparisonCount = 0; // ë¹„êµ íšŸìˆ˜
+int moveCount = 0; // ì´ë™ íšŸìˆ˜
 int totalComparisons = 0;
 int totalMoves = 0;
 int isFirst = 0;
@@ -15,10 +15,10 @@ int isFirst = 0;
 void generateRandomArray(int array[]) {
     int count = 0;
     while (count < SIZE) {
-        int num = rand() % 1000; // 0-999 »çÀÌÀÇ ·£´ı µ¥ÀÌÅÍ
+        int num = rand() % 1000; // 0-999 ì‚¬ì´ì˜ ëœë¤ ë°ì´í„°
         int isDuplicate = 0;
 
-        // Áßº¹ Ã¼Å©
+        // ì¤‘ë³µ ì²´í¬
         for (int i = 0; i < count; i++) {
             if (array[i] == num) {
                 isDuplicate = 1;
@@ -26,7 +26,7 @@ void generateRandomArray(int array[]) {
             }
         }
 
-        // Áßº¹ÀÌ ¾Æ´Ò °æ¿ì ¹è¿­¿¡ Ãß°¡
+        // ì¤‘ë³µì´ ì•„ë‹ ê²½ìš° ë°°ì—´ì— ì¶”ê°€
         if (!isDuplicate) {
             array[count++] = num;
         }
@@ -51,44 +51,48 @@ void merge(int list[], int left, int mid, int right, int rounds) {
         else {
             sorted[k++] = list[j++];
         }
-        moveCount++; // ¿ä¼Ò°¡ sorted ¹è¿­·Î ÀÌµ¿
+        moveCount++; // ìš”ì†Œê°€ sorted ë°°ì—´ë¡œ ì´ë™
     }
 
     while (i <= mid) {
         sorted[k++] = list[i++];
-        moveCount++; // ¿ä¼Ò°¡ sorted ¹è¿­·Î ÀÌµ¿
+        moveCount++; // ìš”ì†Œê°€ sorted ë°°ì—´ë¡œ ì´ë™
     }
 
     while (j <= right) {
         sorted[k++] = list[j++];
-        moveCount++; // ¿ä¼Ò°¡ sorted ¹è¿­·Î ÀÌµ¿
+        moveCount++; // ìš”ì†Œê°€ sorted ë°°ì—´ë¡œ ì´ë™
     }
 
     for (int l = left; l <= right; l++) {
         list[l] = sorted[l];
-        moveCount++; // ¿ä¼Ò°¡ list ¹è¿­·Î ÀÌµ¿
+        moveCount++; // ìš”ì†Œê°€ list ë°°ì—´ë¡œ ì´ë™
     }
 
-    if (rounds % 10 == 0 && isFirst == 0) { //10 ¹ø¿¡ ÇÑ¹ø¸¸ Ãâ·Â
-        for (int i = 0; i < 10; i++) //0 ~ 9 °ª
+    if (rounds % 10 == 0 && isFirst == 0) { //10 ë²ˆì— í•œë²ˆë§Œ ì¶œë ¥
+        for (int i = 0; i < 10; i++) //0 ~ 9 ê°’
             printf("%3d ", list[i]);
         printf("| ");
-        for (int i = SIZE / 2 - 1; i < SIZE / 2 + 10; i++) // Áß¾Ó-1 ~ Áß¾Ó+10
+        for (int i = SIZE / 2 - 1; i < SIZE / 2 + 10; i++) // ì¤‘ì•™-1 ~ ì¤‘ì•™+10
             printf("%3d ", list[i]);
         printf("\n\n");
     }
 }
 
 void iterativeMergeSort(int list[], int n) {
-    int rounds = 0;
-    for (int size = 1; size < n; size *= 2) {
-        for (int left = 0; left < n; left += 2 * size) {
-            int mid = left + size - 1;
-            int right = (left + 2 * size - 1 < n) ? (left + 2 * size - 1) : (n - 1);
+    int rounds = 0; // ë³‘í•© íšŒìˆ˜ ì´ˆê¸°í™”
 
+    // ì¡°ê° í¬ê¸°ë¥¼ 1ë¶€í„° ì‹œì‘í•˜ì—¬ ë‘ ë°°ë¡œ ì¦ê°€ì‹œí‚¤ë©° ë³‘í•©
+    for (int size = 1; size < n; size *= 2) {
+        // í˜„ì¬ ë³‘í•©í•  ì¡°ê°ì˜ ì‹œì‘ ì¸ë±ìŠ¤
+        for (int left = 0; left < n; left += 2 * size) {
+            int mid = left + size - 1; // ì¤‘ê°„ ì¸ë±ìŠ¤ ê³„ì‚°
+            int right = (left + 2 * size - 1 < n) ? (left + 2 * size - 1) : (n - 1); // ë ì¸ë±ìŠ¤ ê³„ì‚°
+
+            // ìœ íš¨í•œ ë²”ìœ„ì—ì„œ ë³‘í•© ìˆ˜í–‰
             if (mid < right) {
-                rounds++;
-                merge(list, left, mid, right, rounds);
+                rounds++; // ë³‘í•© íšŒìˆ˜ ì¦ê°€
+                merge(list, left, mid, right, rounds); // ë³‘í•© í•¨ìˆ˜ í˜¸ì¶œ
             }
         }
     }
@@ -97,7 +101,7 @@ void iterativeMergeSort(int list[], int n) {
 int main() {
     int array[SIZE];
 
-    srand(time(NULL)); // ·£´ı ½Ãµå ÃÊ±âÈ­
+    srand(time(NULL)); // ëœë¤ ì‹œë“œ ì´ˆê¸°í™”
 
     for (int i = 0; i < 20; i++) {
         generateRandomArray(array);
