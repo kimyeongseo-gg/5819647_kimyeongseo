@@ -12,6 +12,7 @@ int totalComparisons = 0;
 int totalMoves = 0;
 int isFirst = 0;
 
+//랜덤 배열 생성
 void generateRandomArray(int array[]) {
     int count = 0;
     while (count < SIZE) {
@@ -40,6 +41,7 @@ void printArray(int array[], int size) {
     printf("\n");
 }
 
+// 병합 함수(주어진 범위에서 두 개의 정렬된 하위 배열 병합)
 void merge(int list[], int left, int mid, int right, int rounds) {
     int i = left, j = mid + 1, k = left;
 
@@ -78,9 +80,9 @@ void merge(int list[], int left, int mid, int right, int rounds) {
         printf("\n\n");
     }
 }
-
+// 반복적 병합 정렬 함수
 void iterativeMergeSort(int list[], int n) {
-    int rounds = 0; // 병합 회수 초기화
+    int rounds = 0; 
 
     // 조각 크기를 1부터 시작하여 두 배로 증가시키며 병합
     for (int size = 1; size < n; size *= 2) {
@@ -99,27 +101,28 @@ void iterativeMergeSort(int list[], int n) {
 }
 
 int main() {
-    int array[SIZE];
+    int array[SIZE]; // 정렬할 랜덤 숫자 배열
 
     srand(time(NULL)); // 랜덤 시드 초기화
 
+    // 20번 반복해 랜덤 배열 생성 -> 정렬
     for (int i = 0; i < 20; i++) {
-        generateRandomArray(array);
+        generateRandomArray(array); // 배열 생성
         comparisonCount = 0;
         moveCount = 0;
 
         if (i == 0) {
             printf("Merge Sort Run\n");
-            iterativeMergeSort(array, SIZE);
+            iterativeMergeSort(array, SIZE); // 병합 정렬 수행
 
             printf("Result\n");
-            printArray(array, SIZE);
-            isFirst++;
+            printArray(array, SIZE); 
+            isFirst++; // 첫번째 실행 플래그 증가
         }
         else {
-            iterativeMergeSort(array, SIZE);
+            iterativeMergeSort(array, SIZE); // 이후 실행에서는 정렬만 수행
         }
-
+        // 각 실행에서의 비교, 이동횟수 총합에 추가
         totalComparisons += comparisonCount;
         totalMoves += moveCount;
     }
