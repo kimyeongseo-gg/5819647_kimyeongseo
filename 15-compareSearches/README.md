@@ -1,2 +1,2 @@
-##result1
-![](/.result1.png)
+#result1
+![](./result1.png)
