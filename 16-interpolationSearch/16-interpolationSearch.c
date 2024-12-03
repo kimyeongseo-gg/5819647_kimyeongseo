@@ -2,92 +2,95 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SIZE 1000
-#define SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t))
+#define SIZE 1000 
+#define SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t)) 
 
-// ·£´ı ¹è¿­ »ı¼º ÇÔ¼ö
+// ëœë¤ ë°°ì—´ ìƒì„± í•¨ìˆ˜
+// ë°°ì—´ì— ëœë¤ ìˆ«ìë¥¼ ì±„ì›Œë„£ìŒ
 void generateRandomArray(int* array) {
     for (int i = 0; i < SIZE; i++) {
-        array[i] = rand() % 10000;
+        array[i] = rand() % 10000; 
     }
 }
 
-// Äü¼ÒÆ®¸¦ À§ÇÑ partition ÇÔ¼ö
+
+// ë°°ì—´ì„ í”¼ë²—ì„ ê¸°ì¤€ìœ¼ë¡œ ë‘ ê°œì˜ ë¶€ë¶„ìœ¼ë¡œ ë‚˜ëˆ”
 int partition(int list[], int left, int right) {
     int pivot, temp;
     int low, high;
 
-    low = left;
-    high = right + 1;
-    pivot = list[left];
+    low = left;                
+    high = right + 1;           
+    pivot = list[left];         
 
     do {
         do
-            low++;
+            low++;              
         while (low <= right && list[low] < pivot);
         do
-            high--;
+            high--;             
         while (high >= left && list[high] > pivot);
-        if (low < high) SWAP(list[low], list[high], temp);
+        if (low < high) SWAP(list[low], list[high], temp); 
     } while (low < high);
 
-    SWAP(list[left], list[high], temp);
-    return high;
+    SWAP(list[left], list[high], temp); 
+    return high; // í”¼ë²—ì˜ ìµœì¢… ìœ„ì¹˜ ë°˜í™˜
 }
 
-// Äü¼ÒÆ® ÇÔ¼ö
+
+// í€µì†ŒíŠ¸ ì¬ê·€ì ìœ¼ë¡œ ë°°ì—´ì„ ì •ë ¬
 void QuickSort(int list[], int left, int right) {
     if (left < right) {
-        int q = partition(list, left, right);
-        QuickSort(list, left, q - 1);
-        QuickSort(list, q + 1, right);
+        int q = partition(list, left, right); 
+        QuickSort(list, left, q - 1);        
+        QuickSort(list, q + 1, right);      
     }
 }
 
-// ¹è¿­ Ãâ·Â ÇÔ¼ö
+// ë°°ì—´ ì¶œë ¥ í•¨ìˆ˜
 void printArray(int* array) {
     printf("Array Sorting Result:\n");
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 20; i++) // ì²« 20ê°œ ì¶œë ¥
         printf("%4d ", array[i]);
     printf("\n");
-    for (int i = SIZE - 20; i < SIZE; i++)
+    for (int i = SIZE - 20; i < SIZE; i++) // ë§ˆì§€ë§‰ 20ê°œ ì¶œë ¥
         printf("%4d ", array[i]);
     printf("\n\n");
 }
 
-// ÀÌÁø Å½»ö ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ í•¨ìˆ˜ ë°°ì—´ì—ì„œ íŠ¹ì • í‚¤ë¥¼ ì°¾ê³  ë¹„êµ íšŸìˆ˜ë¥¼ ê¸°ë¡
 int binarySearch(int* array, int key, int* compareCount) {
     int low = 0;
     int high = SIZE - 1;
     *compareCount = 0;
 
     while (low <= high) {
-        (*compareCount)++;
+        (*compareCount)++; // ë¹„êµ íšŸìˆ˜ ì¦ê°€
         int middle = (low + high) / 2;
-        if (key == array[middle]) return middle;
-        else if (key > array[middle]) low = middle + 1;
+        if (key == array[middle]) return middle; 
+        else if (key > array[middle]) low = middle + 1; 
         else high = middle - 1;
     }
-    return -1;
+    return -1; 
 }
 
-// º¸°£ Å½»ö ÇÔ¼ö ¼öÁ¤
+// ë³´ê°„ íƒìƒ‰ í•¨ìˆ˜ ìˆ˜ì •
 int interpolationSearch(int* array, int key, int* compareCount) {
     int low = 0;
     int high = SIZE - 1;
     *compareCount = 0;
 
     while (1) {
-        // ¹üÀ§ Ã¼Å© ¹× ºñ±³ È½¼ö Áõ°¡
+        // ë²”ìœ„ ì²´í¬ ë° ë¹„êµ íšŸìˆ˜ ì¦ê°€
         (*compareCount)++;
         if (array[high] < key || key <= array[low])
             break;
 
-        // º¸°£ À§Ä¡ °è»ê
+        // ë³´ê°„ ìœ„ì¹˜ ê³„ì‚°
         int j = ((float)(key - array[low]) / (array[high] - array[low])
             * (high - low)) + low;
 
-        (*compareCount)++; // ÇöÀç À§Ä¡ÀÇ °ª°ú Å° °ª ºñ±³
+        (*compareCount)++; // í˜„ì¬ ìœ„ì¹˜ì˜ ê°’ê³¼ í‚¤ ê°’ ë¹„êµ
         if (key > array[j]) {
             low = j + 1;
         }
@@ -95,55 +98,56 @@ int interpolationSearch(int* array, int key, int* compareCount) {
             high = j - 1;
         }
         else {
-            return j; // Å°¸¦ Ã£Àº °æ¿ì
+            return j; // í‚¤ë¥¼ ì°¾ì€ ê²½ìš°
         }
     }
 
-    // ¸¶Áö¸· À§Ä¡ È®ÀÎ
+    // ë§ˆì§€ë§‰ ìœ„ì¹˜ í™•ì¸
     (*compareCount)++;
     if (array[low] == key) return low;
     return -1;
 }
 
 
-// Æò±Õ ÀÌÁø Å½»ö ºñ±³ È½¼ö °è»ê
+// í‰ê·  ì´ì§„ íƒìƒ‰ ë¹„êµ íšŸìˆ˜ ê³„ì‚°
 float getAverageBinarySearchCompareCount(int* array) {
     int totalCompareCount = 0;
     int compareCount;
 
     for (int i = 0; i < 1000; i++) {
-        int target = array[rand() % SIZE];
-        binarySearch(array, target, &compareCount);
+        int target = array[rand() % SIZE]; 
+        binarySearch(array, target, &compareCount); // ì´ì§„ íƒìƒ‰ ì‹¤í–‰
         totalCompareCount += compareCount;
     }
     return (float)totalCompareCount / 1000;
 }
 
-// Æò±Õ º¸°£ Å½»ö ºñ±³ È½¼ö °è»ê
+// í‰ê·  ë³´ê°„ íƒìƒ‰ ë¹„êµ íšŸìˆ˜ ê³„ì‚°
 float getAverageInterpolationSearchComparecount(int* array) {
     int totalCompareCount = 0;
     int compareCount;
 
     for (int i = 0; i < 1000; i++) {
-        int target = array[rand() % SIZE];
-        interpolationSearch(array, target, &compareCount);
+        int target = array[rand() % SIZE]; 
+        interpolationSearch(array, target, &compareCount); // ë³´ê°„ íƒìƒ‰ ì‹¤í–‰
         totalCompareCount += compareCount;
     }
-    return (float)totalCompareCount / 1000;
+    return (float)totalCompareCount / 1000; 
 }
 
 int main(int argc, char* argv[]) {
-    srand(time(NULL));
+    srand(time(NULL)); 
     int array[SIZE];
 
-    generateRandomArray(array);
-    QuickSort(array, 0, SIZE - 1);
-    printArray(array);
+    generateRandomArray(array); // ëœë¤ ë°°ì—´ ìƒì„±
+    QuickSort(array, 0, SIZE - 1); // ë°°ì—´ ì •ë ¬
+    printArray(array); // ë°°ì—´ ì¶œë ¥
 
+    // í‰ê·  ë¹„êµ íšŸìˆ˜ ì¶œë ¥
     printf("Average Compare Count of Binary Search: %.2f\n",
         getAverageBinarySearchCompareCount(array));
     printf("Average Compare Count of Interpolation Search: %.2f\n",
         getAverageInterpolationSearchComparecount(array));
 
-    return 0;
+    return 0; 
 }
