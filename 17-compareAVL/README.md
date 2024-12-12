@@ -1,9 +1,11 @@
 ## result1
-![](./1.png)
-## result2
-![](./2.png)
-## result3
 ![](./3.png)
+
+## result2
+![](./1.png)
+
+## result3
+![](./2.png)
 
 # AVL 트리와 이진 탐색 트리(BST) 성능 비교
 
