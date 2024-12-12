@@ -5,7 +5,12 @@
 ## result3
 ![](./3.png)
 
-### AVL 트리와 이진 탐색 트리(BST) 성능 비교
+# AVL 트리와 이진 탐색 트리(BST) 성능 비교
+
+## 성능지표
+- compareCount: 탐색 작업 중 수행된 총 비교 횟수를 추적함.
+- searchCount: 수행된 탐색 작업의 수를 추적함.
+- averageCompareCount: 탐색 작업당 평균 비교 횟수를 계산함.
 
 ## 결과 분석
 1. AVL 트리
