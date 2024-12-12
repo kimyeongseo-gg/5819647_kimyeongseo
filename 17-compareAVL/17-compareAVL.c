@@ -11,7 +11,7 @@ typedef struct Node {
 int compareCount = 0;
 int searchCount = 0;
 
-// ³ëµå »ı¼º ÇÔ¼ö
+// ë…¸ë“œ ìƒì„± í•¨ìˆ˜
 Node* createNode(int key) {
     Node* nptr = (Node*)malloc(sizeof(Node));
     nptr->key = key;
@@ -20,17 +20,17 @@ Node* createNode(int key) {
     return (nptr);
 }
 
-// AVL Æ®¸®ÀÇ ³ôÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì˜ ë†’ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 int getHeight(Node* nptr) {
     return (nptr == (Node*)NULL) ? 0 : nptr->height;
 }
 
-// AVL Æ®¸®ÀÇ ±ÕÇüÀ» °è»êÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì˜ ê· í˜•ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
 int getBalance(Node* nptr) {
     return getHeight(nptr->left) - getHeight(nptr->right);
 }
 
-// AVL Æ®¸®¿¡¼­ ¿À¸¥ÂÊ È¸ÀüÀ» ¼öÇàÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ ì˜¤ë¥¸ìª½ íšŒì „ì„ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
 Node* rotateRight(Node* y) {
     Node* x = y->left;
     Node* T3 = x->right;
@@ -45,7 +45,7 @@ Node* rotateRight(Node* y) {
     return x;
 }
 
-// AVL Æ®¸®¿¡¼­ ¿ŞÂÊ È¸ÀüÀ» ¼öÇàÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ ì™¼ìª½ íšŒì „ì„ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
 Node* rotateLeft(Node* y) {
     Node* x = y->right;
     Node* T2 = x->left;
@@ -60,19 +60,19 @@ Node* rotateLeft(Node* y) {
     return x;
 }
 
-// AVL Æ®¸®¿¡¼­ ¿ŞÂÊ-¿À¸¥ÂÊ È¸ÀüÀ» ¼öÇàÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ ì™¼ìª½-ì˜¤ë¥¸ìª½ íšŒì „ì„ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
 Node* rotateLeftRight(Node* z) {
-    z->left = rotateLeft(z->left); // ¿ŞÂÊ È¸Àü
-    return rotateRight(z); // ¿À¸¥ÂÊ È¸Àü
+    z->left = rotateLeft(z->left); // ì™¼ìª½ íšŒì „
+    return rotateRight(z); // ì˜¤ë¥¸ìª½ íšŒì „
 }
 
-// AVL Æ®¸®¿¡¼­ ¿À¸¥ÂÊ-¿ŞÂÊ È¸ÀüÀ» ¼öÇàÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ ì˜¤ë¥¸ìª½-ì™¼ìª½ íšŒì „ì„ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
 Node* rotateRightLeft(Node* z) {
-    z->right = rotateRight(z->right); // ¿À¸¥ÂÊ È¸Àü
-    return rotateLeft(z); // ¿ŞÂÊ È¸Àü
+    z->right = rotateRight(z->right); // ì˜¤ë¥¸ìª½ íšŒì „
+    return rotateLeft(z); // ì™¼ìª½ íšŒì „
 }
 
-// AVL Æ®¸®¿¡ »õ·Î¿î Å°¸¦ »ğÀÔÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì— ìƒˆë¡œìš´ í‚¤ë¥¼ ì‚½ì…í•˜ëŠ” í•¨ìˆ˜
 Node* insertAVL(Node* root, int key) {
     if (root == (Node*)NULL) return createNode(key);
 
@@ -88,7 +88,7 @@ Node* insertAVL(Node* root, int key) {
 
     int balance = getBalance(root);
 
-    // AVL Æ®¸® ±ÕÇü Á¶Á¤
+    // AVL íŠ¸ë¦¬ ê· í˜• ì¡°ì •
     if (balance >= 2) {
         if (getBalance(root->left) >= 0) return rotateRight(root); // LL
         else return rotateLeftRight(root); // LR
@@ -100,14 +100,14 @@ Node* insertAVL(Node* root, int key) {
     return root;
 }
 
-// AVL Æ®¸®¿¡¼­ ÃÖ¼Ò°ª ³ëµå¸¦ Ã£´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ ìµœì†Œê°’ ë…¸ë“œë¥¼ ì°¾ëŠ” í•¨ìˆ˜
 Node* minValueNode(Node* node) {
     Node* current = node;
     while (current->left != NULL) current = current->left;
     return current;
 }
 
-// AVL Æ®¸®¿¡¼­ Æ¯Á¤ Å°¸¦ »èÁ¦ÇÏ´Â ÇÔ¼ö
+// AVL íŠ¸ë¦¬ì—ì„œ íŠ¹ì • í‚¤ë¥¼ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜
 Node* deleteAVL(Node* root, int key) {
     if (root == NULL) return root;
 
@@ -143,7 +143,7 @@ Node* deleteAVL(Node* root, int key) {
 
     int balance = getBalance(root);
 
-    // AVL Æ®¸® ±ÕÇü Á¶Á¤
+    // AVL íŠ¸ë¦¬ ê· í˜• ì¡°ì •
     if (balance >= 2) {
         if (getBalance(root->left) >= 0) return rotateRight(root); // LL
         else return rotateLeftRight(root); // LR
@@ -155,7 +155,7 @@ Node* deleteAVL(Node* root, int key) {
     return root;
 }
 
-// ÀÌÁø Å½»ö Æ®¸®¿¡ »õ·Î¿î Å°¸¦ »ğÀÔÇÏ´Â ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì— ìƒˆë¡œìš´ í‚¤ë¥¼ ì‚½ì…í•˜ëŠ” í•¨ìˆ˜
 Node* insertBST(Node* root, int key) {
     if (root == NULL) return createNode(key);
 
@@ -163,11 +163,11 @@ Node* insertBST(Node* root, int key) {
         root->left = insertBST(root->left, key);
     else if (key > root->key)
         root->right = insertBST(root->right, key);
-    // Áßº¹µÈ Å°´Â »ğÀÔÇÏÁö ¾ÊÀ½
+    // ì¤‘ë³µëœ í‚¤ëŠ” ì‚½ì…í•˜ì§€ ì•ŠìŒ
     return root;
 }
 
-// ÀÌÁø Å½»ö Æ®¸®¿¡¼­ Æ¯Á¤ Å°¸¦ »èÁ¦ÇÏ´Â ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ íŠ¹ì • í‚¤ë¥¼ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜
 Node* deleteBST(Node* root, int key) {
     if (root == NULL) return root;
     if (key < root->key) {
@@ -197,15 +197,15 @@ Node* deleteBST(Node* root, int key) {
     return root;
 }
 
-// ÀÌÁø Å½»ö Æ®¸®¿¡¼­ Æ¯Á¤ Å°¸¦ Å½»öÇÏ´Â ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ íŠ¹ì • í‚¤ë¥¼ íƒìƒ‰í•˜ëŠ” í•¨ìˆ˜
 int search(Node* root, int key) {
     compareCount++;
     if (root == NULL) {
-        return 0; // Ã£Áö ¸øÇÔ
+        return 0; // ì°¾ì§€ ëª»í•¨
     }
     compareCount++;
     if (root->key == key) {
-        return 1; // Ã£À½
+        return 1; // ì°¾ìŒ
     }
     else if (root->key > key) {
         return search(root->left, key);
@@ -215,7 +215,7 @@ int search(Node* root, int key) {
     }
 }
 
-// Æ®¸® ¸Ş¸ğ¸® ÇØÁ¦ ÇÔ¼ö
+// íŠ¸ë¦¬ ë©”ëª¨ë¦¬ í•´ì œ í•¨ìˆ˜
 void freeTree(Node* root) {
     if (root != NULL) {
         freeTree(root->left);
@@ -225,7 +225,7 @@ void freeTree(Node* root) {
     else return;
 }
 
-// AVL Æ®¸® ÀÛ¾÷ ¹èÄ¡ ¼öÇà ÇÔ¼ö
+// AVL íŠ¸ë¦¬ ì‘ì—… ë°°ì¹˜ ìˆ˜í–‰ í•¨ìˆ˜
 void doAVLBatch(Node* root) {
     searchCount = 0;
     for (int i = 0; i < 2000; i++) {
@@ -245,17 +245,17 @@ void doAVLBatch(Node* root) {
 
 }
 
-// ÀÌÁø Å½»ö Æ®¸® ÀÛ¾÷ ¹èÄ¡ ¼öÇà ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ì‘ì—… ë°°ì¹˜ ìˆ˜í–‰ í•¨ìˆ˜
 void doBinaryBatch(Node* root) {
     searchCount = 0;
     for (int i = 0; i < 2000; i++) {
         int A = rand() % 3;
         int B = rand() % 1000;
         if (A == 0) {
-            root = insertBST(root, B); // ÀÌÁø Å½»ö Æ®¸®¿¡¼­ »ğÀÔ
+            root = insertBST(root, B); // ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ ì‚½ì…
         }
         else if (A == 1) {
-            root = deleteBST(root, B); // ÀÌÁø Å½»ö Æ®¸®¿¡¼­ »èÁ¦
+            root = deleteBST(root, B); // ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ ì‚­ì œ
         }
         else if (A == 2) {
             searchCount++;
@@ -270,19 +270,20 @@ int main(int argc, char* argv[]) {
     float allCount = 0.0;
 
 
-    // AVL Æ®¸® ÀÛ¾÷ ¼öÇà
+    // AVL íŠ¸ë¦¬ ì‘ì—… ìˆ˜í–‰
     doAVLBatch(root);
     allCount = (float)compareCount / searchCount;
     printf("average AVL compare count: %.2f\n", allCount);
+    
     freeTree(root);
     root = NULL;
     compareCount = allCount = 0;
 
-    // ÀÌÁø Å½»ö Æ®¸® ÀÛ¾÷ ¼öÇà
+    // ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ì‘ì—… ìˆ˜í–‰
     doBinaryBatch(root);
     allCount = (float)compareCount / searchCount;
     printf("average Bin compare count: %.2f\n", allCount);
+    
     freeTree(root);
-
     return 0;
 }
